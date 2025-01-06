@@ -1,13 +1,11 @@
 # Note: Replace **<YOUR_APPLICATION_TOKEN>** with your actual Application token
 
 import requests
-from typing import Optional
 import os
-import json
+from typing import Optional
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
-
 
 BASE_API_URL = "https://api.langflow.astra.datastax.com"
 LANGFLOW_ID = "73ed6dad-e50e-4c33-b0f2-96c64c5a093c"
@@ -40,5 +38,6 @@ def run_flow_ask_chat_bot(message: str,
     if application_token:
         headers = {"Authorization": "Bearer " + application_token, "Content-Type": "application/json"}
     response = requests.post(api_url, json=payload, headers=headers)
+    response.raise_for_status()  # Ensure we raise an error for bad responses
     return response.json()["outputs"][0]["outputs"][0]["results"]["message"]["text"]
 
